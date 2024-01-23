@@ -47,16 +47,20 @@ public class LoginActivity extends AppCompatActivity {
         text = findViewById(R.id.sign_up_button);
 
 
+
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                text.setVisibility(View.GONE);
+
                 userType = spinner.getSelectedItem().toString();
 
                 if (userType.equals("Member") || userType.equals("Trainer")) {
-                    text.setVisibility(View.GONE);
-                } else {
+                    passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                } else if (userType.equals("Admin")) {
                     text.setVisibility(View.VISIBLE);
+                } else {
+                    text.setVisibility(View.GONE);
                 }
             }
 
@@ -79,12 +83,10 @@ public class LoginActivity extends AppCompatActivity {
                     break;
 
                 case "Member":
-                    passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     loginMember(username,password);
                     break;
 
                 case "Trainer":
-                    passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     loginTrainer(username,password);
                     break;
 

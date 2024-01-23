@@ -81,9 +81,6 @@ public class MembersListFragment extends Fragment {
         getdata();
         return view;
     }
-    public static void setGymId(String d){
-        gym_Id = d;
-    }
 
     private void getdata(){
         db.collection("gymIDs/"+gym_Id+"/Member")

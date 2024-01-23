@@ -1,11 +1,21 @@
 package com.example.fitsync;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.example.fitsync.models.AdminModel;
+import com.example.fitsync.models.TrainerModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,10 +64,52 @@ public class TrainerFragment2 extends Fragment {
         }
     }
 
+    static String gymId,username;
+    TextView trainer_name_textview,gymid_textview,gymname_textview,complaint_box_textview,logout_textview;
+    FirebaseFirestore firebase = FirebaseFirestore.getInstance();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trainer2, container, false);
+        View view = inflater.inflate(R.layout.fragment_trainer2, container, false);
+
+        trainer_name_textview = view.findViewById(R.id.trainer_name);
+        gymname_textview = view.findViewById(R.id.gym_name);
+        gymid_textview = view.findViewById(R.id.gym_id);
+        logout_textview = view.findViewById(R.id.logout_member);
+        complaint_box_textview = view.findViewById(R.id.complain_box_view);
+
+        findGymName();
+
+        firebase.collection("gymIDs").document(gymId).collection("Trainer")
+                .document(username).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            TrainerModel trainerModel = documentSnapshot.toObject(TrainerModel.class);
+                            trainer_name_textview.setText(trainerModel.getFirstName()+" "+trainerModel.getLastName());
+                            gymid_textview.setText(gymId);
+                        }
+                    }
+                });
+
+        complaint_box_textview.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), ComplaintBoxActivity.class);
+            startActivity(intent);
+        });
+
+        return view;
+    }
+
+    void findGymName() {
+        firebase.collection("gyms").whereEqualTo("gymId",gymId).get()
+                .addOnCompleteListener(task -> {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        AdminModel adminModel = documentSnapshot.toObject(AdminModel.class);
+                        gymname_textview.setText("Gym Name : "+adminModel.getGymName());
+                    }
+                });
     }
 }
