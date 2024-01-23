@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MemberFragment1">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/member_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Member Name"
+        android:textSize="40dp"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:id="@+id/gym_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Gym Id : "
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/member_name" />
+    <TextView
+        android:id="@+id/change_details_member"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/gym_id"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="69dp"
+        android:text="Trainer Subscription "
+        android:textSize="20dp"
+        android:gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/complain_box_view"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/change_details_member"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="6dp"
+        android:text="Complain Box"
+        android:textSize="20dp"
+        android:gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/logout_member"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/complain_box_view"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="6dp"
+        android:text="Log Out "
+        android:textSize="20dp"
+        android:gravity="center_vertical"/>
+</RelativeLayout>
+</FrameLayout>
+

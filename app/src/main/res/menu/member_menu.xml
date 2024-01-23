@@ -1,0 +1,9 @@
+<!-- res/menu/bottom_navigation_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/track_workouts"
+        android:title="Track Workouts" />
+    <item
+        android:id="@+id/member_profile"
+        android:title="Profile" />
+</menu>

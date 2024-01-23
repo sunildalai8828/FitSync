@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminFragment3">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/gym_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:text="Gym Name "
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"/>
+        <TextView
+            android:id="@+id/gym_id_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Gym id: "
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/gym_name_text_view" />
+
+        <TextView
+            android:id="@+id/change_details_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/gym_id_text_view"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="69dp"
+            android:text="Change Details"
+            android:textSize="20dp"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/send_message_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/change_details_text_view"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:text="Send Meassage"
+            android:textSize="20dp"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/log_out_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/send_message_text_view"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:text="Log Out "
+            android:textSize="20dp"
+            android:gravity="center_vertical"/>
+    </RelativeLayout>
+
+</FrameLayout>

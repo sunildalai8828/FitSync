@@ -1,0 +1,9 @@
+<!-- res/menu/bottom_navigation_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/staff_overview"
+        android:title="Overview" />
+    <item
+        android:id="@+id/staff_profile"
+        android:title="Profile"/>
+</menu>

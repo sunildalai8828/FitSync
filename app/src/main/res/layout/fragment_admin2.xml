@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminFragment2">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/app_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="50dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_below="@id/app_icon"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:entries="@array/gym_user_types"
+            android:background="@drawable/background_border"/>
+
+        <EditText
+            android:id="@+id/first_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spinner2"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="First Name" />
+
+        <EditText
+            android:id="@+id/last_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/first_name_edit_text"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Last Name" />
+
+        <RadioGroup
+            android:id="@+id/gender_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:layout_below="@id/last_name_edit_text">
+
+            <TextView
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:hint="Gender :"/>
+
+            <RadioButton
+                android:id="@+id/male_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Male"
+                android:textSize="18dp"
+                android:layout_marginLeft="16dp"
+                />
+
+            <RadioButton
+                android:id="@+id/female_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Female"
+                android:textSize="18dp"
+                android:layout_marginLeft="16dp"/>
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/phone_number_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gender_group"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Phone Number"
+            android:inputType="phone"/>
+
+        <EditText
+            android:id="@+id/gym_id_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/phone_number_edit_text"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Gym ID"/>
+
+        <EditText
+            android:id="@+id/date_join_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mode_of_payment_group"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Date of Joining"
+            android:editable="false"
+            />
+
+        <Spinner
+            android:background="@drawable/background_border"
+            android:id="@+id/plan_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/gym_id_edit_text"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/users_plans"/>
+
+        <RadioGroup
+            android:id="@+id/mode_of_payment_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:layout_below="@id/plan_spinner">
+
+            <TextView
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:hint="Mode Of Payment :"/>
+
+            <RadioButton
+                android:id="@+id/offline_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Offline"
+                android:textSize="18dp"
+                android:layout_marginLeft="16dp"
+                />
+
+            <RadioButton
+                android:id="@+id/online_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Online"
+                android:textSize="18dp"
+                android:layout_marginLeft="16dp"/>
+        </RadioGroup>
+
+        <Spinner
+            android:background="@drawable/background_border"
+            android:id="@+id/experience_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/date_join_edit_text"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/experience"/>
+
+        <Button
+            android:id="@+id/create_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/experience_spinner"
+            android:text="Create"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+</ScrollView>
