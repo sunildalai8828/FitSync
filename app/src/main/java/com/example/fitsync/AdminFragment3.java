@@ -36,9 +36,11 @@ public class AdminFragment3 extends Fragment {
                         if (task.isSuccessful()){
                             DocumentSnapshot document = task.getResult();
                             AdminModel adminmodel = document.toObject(AdminModel.class);
+                            gymid_textview.setText("Gym Id : "+adminmodel.getGymId());
+                            gymname_textview.setText(adminmodel.getAdminName());
                         }
                     }
-                })
+                });
 
         return view;
     }
