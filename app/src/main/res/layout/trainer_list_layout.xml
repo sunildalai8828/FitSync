@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/trainer_name_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name : "/>
+            <TextView
+                android:id="@+id/trainer_name_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/trainer_name_text_view" />
+
+            <TextView
+                android:id="@+id/trainer_phone_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone : "
+                android:layout_below="@id/trainer_name_display"/>
+            <TextView
+                android:id="@+id/trainer_phone_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/trainer_name_display"
+                android:layout_toEndOf="@id/trainer_phone_text_view"/>
+
+            <TextView
+                android:id="@+id/trainer_experience_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Experience : "
+                android:layout_below="@id/trainer_phone_display"/>
+            <TextView
+                android:id="@+id/trainer_experience_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/trainer_phone_display"
+                android:layout_toEndOf="@id/trainer_experience_text_view" />
+
+            <Button
+                android:id="@+id/add_member"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:backgroundTint="@color/main"
+                android:layout_below="@id/trainer_experience_display"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+    <RelativeLayout
+        android:id="@+id/assign_member_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView">
+
+        <Spinner
+            android:id="@+id/members_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <RadioGroup
+            android:id="@+id/mode_of_payment_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/members_list"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mode Of Payment :"/>
+
+            <RadioButton
+                android:id="@+id/offline_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Offline"
+                android:layout_marginLeft="16dp"
+                />
+
+            <RadioButton
+                android:id="@+id/online_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Online"
+                android:layout_marginLeft="16dp"/>
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/assign_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mode_of_payment_group"
+            android:text="Assign"
+            android:backgroundTint="@color/main"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

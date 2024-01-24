@@ -48,6 +48,7 @@ public class LoadActivity extends AppCompatActivity {
                         MembersListFragment.gym_Id = adminModel.getGymId();
                         AdminFragment3.username=adminModel.getAdminUsername();
                         AdminComplaintBoxActivity.gym_id = adminModel.getGymId();
+                        AdminFragment4.gym_id = adminModel.getGymId();
                         intent = new Intent(LoadActivity.this,AdminActivity.class);
                         startActivity(intent);
                     }

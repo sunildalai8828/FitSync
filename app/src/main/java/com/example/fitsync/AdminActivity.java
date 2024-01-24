@@ -27,6 +27,8 @@ public class AdminActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminFragment2()).commit();
             } else if (item.getItemId() == R.id.admin_profile) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminFragment3()).commit();
+            } else if (item.getItemId() == R.id.assign_trainer) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminFragment4()).commit();
             }
             return true; // Return true to indicate that the event was handled
         });

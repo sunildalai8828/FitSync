@@ -7,6 +7,9 @@
         android:id="@+id/add"
         android:title="Add" />
     <item
+        android:id="@+id/assign_trainer"
+        android:title="Assign Trainer" />
+    <item
         android:id="@+id/admin_profile"
         android:title="Proifle" />
 </menu>
