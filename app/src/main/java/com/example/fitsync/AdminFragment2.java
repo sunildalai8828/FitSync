@@ -41,6 +41,7 @@ public class AdminFragment2 extends Fragment {
 
     FirebaseFirestore firestore;
     MemberModel memberModel;
+    Boolean paymentStatus;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,6 +119,8 @@ public class AdminFragment2 extends Fragment {
 
         create.setOnClickListener(v->{
             plan = plans.getSelectedItem().toString();
+
+
             if (userType.equals("Trainer")) {
                 yearsOfExperience = experience.getSelectedItem().toString();
                 if(yearsOfExperience.isEmpty() || yearsOfExperience.equals("Select Years Of Experience")) {
@@ -132,6 +135,12 @@ public class AdminFragment2 extends Fragment {
                 if(modeOfPayment.isEmpty()) {
                     Toast.makeText(getContext(), "Please select the mode of payment!", Toast.LENGTH_SHORT).show();
                     return;
+                } else {
+                    if (modeOfPayment.equals("Offline")) {
+                        paymentStatus = true;
+                    } else if (modeOfPayment.equals("Online")) {
+                        paymentStatus = false;
+                    }
                 }
                 createDateOfEnding();
             }
@@ -234,7 +243,7 @@ public class AdminFragment2 extends Fragment {
 
     public void createMemberUser(){
         memberModel = new MemberModel(firstName,lastName,gender,phoneNumber,gymID,
-                    dateOfJoining,dateOfEnding,plan,modeOfPayment);
+                    dateOfJoining,dateOfEnding,plan,modeOfPayment,paymentStatus,null);
 
         firestore.collection("gymIDs/"+gymID+"/"+userType)
                 .document(phoneNumber).set(memberModel).addOnSuccessListener(new OnSuccessListener<Void>() {

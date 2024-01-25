@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.fitsync.models.MemberModel;
 import com.example.fitsync.models.TrainerModel;
+import com.example.fitsync.models.TrainerSubscriptionModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -77,9 +79,10 @@ public class AdminFragment4 extends Fragment {
     }
 
     ListView listView;
-    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    static FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     static String gym_id;
     static List<String> memberNames = new ArrayList<>();
+    static List<String> memberUsernames = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,6 +113,9 @@ public class AdminFragment4 extends Fragment {
                                 if (!memberNames.contains(fullName)) {
                                     memberNames.add(fullName);
                                 }
+                                if (!memberUsernames.contains(memberModel.getMemberUsername())) {
+                                    memberUsernames.add(memberModel.getMemberUsername());
+                                }
                             }
                         }
                     }
@@ -137,6 +143,45 @@ public class AdminFragment4 extends Fragment {
                 });
     }
 
+    static void findMember(TrainerSubscriptionModel trainerSubscriptionModel,String memberName,
+                           TrainerModel trainerModel) {
+        String memberNameParts[] = memberName.split(" ");
+        firestore.collection("gymIDs/"+gym_id+"/Member")
+                .whereEqualTo("firstName",memberNameParts[0])
+                .whereEqualTo("lastName",memberNameParts[1])
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                MemberModel memberModel = documentSnapshot.toObject(MemberModel.class);
+                                firestore.collection("gymIDs/"+gym_id+"/Member")
+                                        .document(documentSnapshot.getId())
+                                        .update("trainerSubscriptionPlan",trainerSubscriptionModel)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                            }
+                                        });
+                                assignMemberToTrainer(documentSnapshot.getId(),memberModel,trainerModel);
+                            }
+                        }
+                    }
+                });
+    }
+
+    static void assignMemberToTrainer(String documentId,MemberModel memberModel,TrainerModel trainerModel) {
+        firestore.collection("gymIDs/").document(gym_id).collection("Trainer")
+                .document(trainerModel.getTrainerUsername()).collection("AssignedMember")
+                .document(documentId).set(memberModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });
+    }
+
     public static class AdapterClass extends ArrayAdapter<TrainerModel> {
 
         public AdapterClass(@NonNull Context context, List<TrainerModel>data) {
@@ -157,6 +202,13 @@ public class AdminFragment4 extends Fragment {
             RelativeLayout assignMemberLayout = convertView.findViewById(R.id.assign_member_layout);
             Button addMember = convertView.findViewById(R.id.add_member);
             Spinner membersList = convertView.findViewById(R.id.members_list);
+            Button assignMember = convertView.findViewById(R.id.assign_member);
+            RadioButton offlineButton = convertView.findViewById(R.id.offline_button);
+            RadioButton onlineButton = convertView.findViewById(R.id.online_button);
+            Spinner plans = convertView.findViewById(R.id.trainer_plans);
+            final String[] modeOfPayment = {null};
+            final Boolean[] paymentStatus = new Boolean[1];
+
 
             assignMemberLayout.setVisibility(View.GONE);
             TrainerModel currentTrainerModel = getItem(position);
@@ -182,7 +234,58 @@ public class AdminFragment4 extends Fragment {
                         break;
                 }
             });
+
+
+            assignMember.setOnClickListener(view -> {
+                String memberName = membersList.getSelectedItem().toString();
+                String trainerPlan = plans.getSelectedItem().toString();
+                calculatePayment(trainerPlan);
+                if (memberName.equals("Select Member")) {
+                    Toast.makeText(getContext(), "Please Select a Member", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (offlineButton.isChecked()) {
+                    modeOfPayment[0] = offlineButton.getText().toString();
+                    paymentStatus[0] = true;
+                } else if (onlineButton.isChecked()) {
+                    modeOfPayment[0] = onlineButton.getText().toString();
+                    paymentStatus[0] = false;
+                } else if (modeOfPayment[0].isEmpty()) {
+                    Toast.makeText(getContext(), "Please Select Mode of Payment", Toast.LENGTH_SHORT).show();
+                }
+
+                TrainerSubscriptionModel trainerSubscriptionModel = new TrainerSubscriptionModel(currentTrainerModel,
+                       trainerPlan,modeOfPayment[0], 1.0,paymentStatus[0]);
+
+                findMember(trainerSubscriptionModel,memberName,currentTrainerModel);
+
+
+            });
             return convertView;
         }
+
+        private void calculatePayment(String plan) {
+//            switch (plan) {
+//                case "1 Month":
+//
+//                    break;
+//                case "3 Month":
+//
+//                    break;
+//                case "6 Month":
+//
+//                    break;
+//                case "9 Month":
+//
+//                    break;
+//                case "12 Month":
+//
+//                    break;
+//                default:
+//                    Toast.makeText(getContext(), "Please Select Membership Plan", Toast.LENGTH_SHORT).show();
+//                    return;
+//            }
+        }
+
     }
 }

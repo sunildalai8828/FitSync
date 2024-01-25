@@ -3,13 +3,15 @@ package com.example.fitsync.models;
 public class MemberModel {
     String firstName,lastName,gender,memberUsername,memberPassword,
             dateOfJoining,dateOfEnding,membershipPlan,modeOfPayment;
+    Boolean paymentStatus;
+    TrainerSubscriptionModel trainerSubscriptionPlan;
 
     public MemberModel() {
     }
 
     public MemberModel(String firstName, String lastName, String gender, String memberUsername,
                        String memberPassword, String dateOfJoining, String dateOfEnding, String membershipPlan
-    ,String modeOfPayment) {
+    ,String modeOfPayment,Boolean paymentStatus,TrainerSubscriptionModel trainerSubscriptionModel) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -19,6 +21,8 @@ public class MemberModel {
         this.dateOfEnding = dateOfEnding;
         this.membershipPlan = membershipPlan;
         this.modeOfPayment = modeOfPayment;
+        this.paymentStatus = paymentStatus;
+        this.trainerSubscriptionPlan = trainerSubscriptionModel;
     }
 
     public String getFirstName() {
@@ -91,5 +95,21 @@ public class MemberModel {
 
     public void setModeOfPayment(String modeOfPayment) {
         this.modeOfPayment = modeOfPayment;
+    }
+
+    public Boolean getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(Boolean paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public TrainerSubscriptionModel getTrainerSubscriptionModel() {
+        return trainerSubscriptionPlan;
+    }
+
+    public void setTrainerSubscriptionModel(TrainerSubscriptionModel trainerSubscriptionModel) {
+        this.trainerSubscriptionPlan = trainerSubscriptionModel;
     }
 }
