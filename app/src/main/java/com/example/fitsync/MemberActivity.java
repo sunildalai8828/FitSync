@@ -8,13 +8,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MemberActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
-    String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member);
 
-        username = getIntent().getStringExtra("username");
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new MemberFragment1()).commit();

@@ -1,0 +1,166 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".TrainerSubscriptionActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/headingTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trainer Subscription"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/trainer_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headingTextView"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="*Visit Desk For Application*"
+            android:gravity="center"
+            android:textStyle="bold"/>
+        <Button
+            android:id="@+id/paymentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pay Now"
+            android:backgroundTint="@color/main"
+            android:layout_below="@id/trainer_info"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/trainer_info_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/paymentButton"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="\u2022 Unlock personalized fitness guidance and achieve your goals faster with our Trainer Subscription." />
+        <TextView
+            android:id="@+id/trainer_info_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/trainer_info_1"
+            android:layout_margin="5dp"
+            android:text="\u2022 Get exclusive access to expert trainers who will tailor workouts and provide ongoing support to maximize your results"
+            />
+
+        <TextView
+            android:id="@+id/subscription_plans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/trainer_info_2"
+            android:layout_margin="5dp"
+            android:text="Subscription Plans : "/>
+        <TextView
+            android:id="@+id/plan_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/subscription_plans"
+            android:layout_margin="5dp"
+            android:text="1 Month : "
+            android:textStyle="italic" />
+        <TextView
+            android:id="@+id/plan_1_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_below="@id/subscription_plans"
+            android:layout_toEndOf="@id/plan_1"
+            android:text="Ideal for those looking for short-term commitment and flexibility."
+            />
+
+        <TextView
+            android:id="@+id/plan_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/plan_1_1"
+            android:layout_margin="5dp"
+            android:text="3 Month : "
+            android:textStyle="italic" />
+        <TextView
+            android:id="@+id/plan_2_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_below="@id/plan_1_1"
+            android:layout_toEndOf="@id/plan_2"
+            android:text="Recommended for individuals seeking mid-term commitment and better value"
+            />
+
+        <TextView
+            android:id="@+id/plan_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/plan_2_1"
+            android:layout_margin="5dp"
+            android:text="6 Month : "
+            android:textStyle="italic" />
+        <TextView
+            android:id="@+id/plan_3_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_below="@id/plan_2_1"
+            android:layout_toEndOf="@id/plan_3"
+            android:text="Suitable for those committed to their fitness journey and seeking long-term savings"
+            />
+
+        <TextView
+            android:id="@+id/plan_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/plan_3_1"
+            android:layout_margin="5dp"
+            android:text="12 Month : "
+            android:textStyle="italic"
+            />
+        <TextView
+            android:id="@+id/plan_4_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_below="@id/plan_3_1"
+            android:layout_toEndOf="@id/plan_4"
+            android:text="Recommended for serious fitness enthusiasts and those seeking maximum savings"
+            />
+
+        <TextView
+            android:id="@+id/trainers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/plan_4_1"
+            android:layout_margin="5dp"
+            android:text="Trainers : "/>
+
+    </RelativeLayout>
+    </ScrollView>
+    <RelativeLayout
+        android:layout_below="@id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/trainers_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </RelativeLayout>
+</RelativeLayout>

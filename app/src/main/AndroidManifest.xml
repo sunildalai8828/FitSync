@@ -13,9 +13,23 @@
         android:theme="@style/Base.Theme.FitSync"
         tools:targetApi="31">
         <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.razorpay.CheckoutActivity"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.razorpay.RzpTokenReceiver"
+            android:exported="false" />
+
+        <activity
+            android:name=".TrainerSubscriptionActivity"
+            android:exported="false" />
+        <activity
             android:name=".ComplaintBoxActivity"
             android:exported="false"
-            android:theme="@style/Theme.FitSync.PopUp"/>
+            android:theme="@style/Theme.FitSync.PopUp" />
         <activity
             android:name=".AdminComplaintBoxActivity"
             android:exported="false" />

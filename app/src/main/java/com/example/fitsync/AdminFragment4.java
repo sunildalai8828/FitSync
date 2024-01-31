@@ -239,7 +239,7 @@ public class AdminFragment4 extends Fragment {
             assignMember.setOnClickListener(view -> {
                 String memberName = membersList.getSelectedItem().toString();
                 String trainerPlan = plans.getSelectedItem().toString();
-                calculatePayment(trainerPlan);
+                Double amount = calculatePayment(trainerPlan);
                 if (memberName.equals("Select Member")) {
                     Toast.makeText(getContext(), "Please Select a Member", Toast.LENGTH_SHORT).show();
                     return;
@@ -254,38 +254,33 @@ public class AdminFragment4 extends Fragment {
                     Toast.makeText(getContext(), "Please Select Mode of Payment", Toast.LENGTH_SHORT).show();
                 }
 
+
                 TrainerSubscriptionModel trainerSubscriptionModel = new TrainerSubscriptionModel(currentTrainerModel,
-                       trainerPlan,modeOfPayment[0], 1.0,paymentStatus[0]);
+                       trainerPlan,modeOfPayment[0],amount,paymentStatus[0]);
 
                 findMember(trainerSubscriptionModel,memberName,currentTrainerModel);
 
-
+                Toast.makeText(getContext(), "Trainer Added Successfully", Toast.LENGTH_SHORT).show();
             });
             return convertView;
         }
 
-        private void calculatePayment(String plan) {
-//            switch (plan) {
-//                case "1 Month":
-//
-//                    break;
-//                case "3 Month":
-//
-//                    break;
-//                case "6 Month":
-//
-//                    break;
-//                case "9 Month":
-//
-//                    break;
-//                case "12 Month":
-//
-//                    break;
-//                default:
-//                    Toast.makeText(getContext(), "Please Select Membership Plan", Toast.LENGTH_SHORT).show();
-//                    return;
-//            }
+        private Double calculatePayment(String plan) {
+            switch (plan) {
+                case "1 Month":
+                    return 1000.0;
+                case "3 Month":
+                    return 2000.0;
+                case "6 Month":
+                    return 5000.0;
+                case "9 Month":
+                    return 7000.0;
+                case "12 Month":
+                    return 9000.0;
+                default:
+                    Toast.makeText(getContext(), "Please Select Membership Plan", Toast.LENGTH_SHORT).show();
+            }
+            return null;
         }
-
     }
 }

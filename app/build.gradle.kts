@@ -50,4 +50,5 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.3.0")
 
     implementation("com.hbb20:ccp:2.5.0")
+    implementation("com.razorpay:checkout:1.5.16")
 }

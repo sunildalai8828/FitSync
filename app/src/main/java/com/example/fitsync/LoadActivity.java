@@ -1,7 +1,10 @@
 package com.example.fitsync;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,8 +13,13 @@ import com.example.fitsync.models.MemberModel;
 import com.example.fitsync.models.TrainerModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
 
-public class LoadActivity extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class LoadActivity extends AppCompatActivity implements PaymentResultListener {
 
     String username,password,userType;
     Intent intent;
@@ -64,10 +72,42 @@ public class LoadActivity extends AppCompatActivity {
                         MemberFragment1.gymId = password;
                         MemberFragment1.username = memberModel.getMemberUsername();
                         ComplaintBoxActivity.gym_id = password;
-                        intent = new Intent(this,MemberActivity.class);
-                        startActivity(intent);
+                        TrainerSubscriptionActivity.gym_Id = password;
+
+                        if (memberModel.getModeOfPayment().equals("Online") && memberModel.getPaymentStatus().equals(false)) {
+                            payFirst(memberModel.getFirstName()+" "+memberModel.getLastName(),
+                                    memberModel.getMemberUsername(),
+                                    memberModel.getPayment());
+                        } else {
+                            intent = new Intent(this,MemberActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 });
+    }
+
+    void payFirst(String fullname,String phonenumber,String amount) {
+        final Activity activity = this;
+
+        Checkout checkout = new Checkout();
+        checkout.setKeyID("rzp_test_9V30Iow9nxYTdn");
+        checkout.setImage(R.drawable.ic_launcher_background);
+
+        double finalAmount = Float.parseFloat(amount)*100;
+
+        try {
+            JSONObject options = new JSONObject();
+            options.put("name",fullname);
+            options.put("image","https://s3.amazonaws.com./rzp-mobile/images/rzp.png");
+            options.put("theme.color",R.color.main);
+            options.put("currency","INR");
+            options.put("amount",finalAmount + "");
+            options.put("prefill.contact",phonenumber);
+
+            checkout.open(activity,options);
+        } catch (JSONException e) {
+            Log.e("Payment","Error",e);
+        }
     }
 
     void getTrainerDetails() {
@@ -83,5 +123,25 @@ public class LoadActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+    }
+
+    @Override
+    public void onPaymentSuccess(String s) {
+        Toast.makeText(this, "Payment Successful", Toast.LENGTH_SHORT).show();
+        firestore.collection("gymIDs").document(password)
+                .collection("Member")
+                .document(username).update("paymentStatus", true)
+                .addOnCompleteListener(task1 -> {
+                    intent = new Intent(this,MemberActivity.class);
+                    startActivity(intent);
+                });
+
+    }
+
+    @Override
+    public void onPaymentError(int i, String s) {
+        Toast.makeText(this, "Payment Failed", Toast.LENGTH_SHORT).show();
+        intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
     }
 }

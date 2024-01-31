@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.fitsync.models.AdminModel;
 import com.example.fitsync.models.MemberModel;
+import com.example.fitsync.models.TrainerSubscriptionModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -22,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * Use the {@link MemberFragment1#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MemberFragment1 extends Fragment {
+public class MemberFragment1 extends Fragment  {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,6 +69,7 @@ public class MemberFragment1 extends Fragment {
             complaint_box_textview,logout_textview;
     FirebaseFirestore firebase=FirebaseFirestore.getInstance();
     static String gymId,username;
+    String fullName;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,11 +93,20 @@ public class MemberFragment1 extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot documentSnapshot = task.getResult();
                             MemberModel memberModel = documentSnapshot.toObject(MemberModel.class);
+                            TrainerSubscriptionModel trainerSubscriptionModel = memberModel.getTrainerSubscriptionPlan();
                             member_name_textview.setText(memberModel.getFirstName()+" "+memberModel.getLastName());
                             gymid_textview.setText(gymId);
+                            TrainerSubscriptionActivity.fullName = memberModel.getFirstName() + " " + memberModel.getLastName();
+                            TrainerSubscriptionActivity.phone = memberModel.getMemberUsername();
+
                         }
                     }
                 });
+
+        trainer_subscription_textview.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), TrainerSubscriptionActivity.class);
+            startActivity(intent);
+        });
 
         complaint_box_textview.setOnClickListener(view1 -> {
             Intent intent = new Intent(getContext(), ComplaintBoxActivity.class);

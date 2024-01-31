@@ -37,7 +37,7 @@ public class AdminFragment2 extends Fragment {
     Button create;
     RadioGroup genderGroup,paymentGroup;
     String userType="",firstName,lastName,phoneNumber,gymID,gender="",
-            dateOfJoining="",plan="",dateOfEnding,modeOfPayment="",yearsOfExperience="";
+            dateOfJoining="",plan="",dateOfEnding,modeOfPayment="",amount,yearsOfExperience="";
 
     FirebaseFirestore firestore;
     MemberModel memberModel;
@@ -136,6 +136,7 @@ public class AdminFragment2 extends Fragment {
                     Toast.makeText(getContext(), "Please select the mode of payment!", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
+                    calculatePayment();
                     if (modeOfPayment.equals("Offline")) {
                         paymentStatus = true;
                     } else if (modeOfPayment.equals("Online")) {
@@ -183,6 +184,28 @@ public class AdminFragment2 extends Fragment {
         });
 
         return view;
+    }
+
+    void calculatePayment() {
+        switch (plan) {
+            case "1 Month":
+                amount = String.valueOf(1200);
+                break;
+            case "3 Month":
+                amount = String.valueOf(2500);
+                break;
+            case "6 Month":
+                amount = String.valueOf(4800);
+                break;
+            case "9 Month":
+                amount = String.valueOf(7000);
+                break;
+            case "12 Month":
+                amount = String.valueOf(10000);
+                break;
+            default:
+                Toast.makeText(getContext(), "Please Select Membership Plan", Toast.LENGTH_SHORT).show();
+        }
     }
 
     void createDateOfEnding() {
@@ -243,20 +266,20 @@ public class AdminFragment2 extends Fragment {
 
     public void createMemberUser(){
         memberModel = new MemberModel(firstName,lastName,gender,phoneNumber,gymID,
-                    dateOfJoining,dateOfEnding,plan,modeOfPayment,paymentStatus,null);
+                dateOfJoining,dateOfEnding,plan,modeOfPayment,amount,paymentStatus,null);
 
         firestore.collection("gymIDs/"+gymID+"/"+userType)
                 .document(phoneNumber).set(memberModel).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getContext(),"Account created!",Toast.LENGTH_LONG).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getContext(),"Account created!",Toast.LENGTH_LONG).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
 
-            }
-        });
+                    }
+                });
     }
 
     public void createTrainerUser(){
