@@ -6,13 +6,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fitsync.models.AdminModel;
 import com.example.fitsync.models.MemberModel;
 import com.example.fitsync.models.TrainerModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -24,6 +28,7 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
     String username,password,userType;
     Intent intent;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    static int createdYear;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +62,10 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
                         AdminFragment3.username=adminModel.getAdminUsername();
                         AdminComplaintBoxActivity.gym_id = adminModel.getGymId();
                         AdminFragment4.gym_id = adminModel.getGymId();
+                        EarningsFragment.gymId = adminModel.getGymId();
+                        AdminFragment2.gymID = adminModel.getGymId();
+                        getGymName(adminModel.getGymId());
+                        createdYear = SignUpAdminActivity.createdYear;
                         intent = new Intent(LoadActivity.this,AdminActivity.class);
                         startActivity(intent);
                     }
@@ -81,6 +90,19 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
                         } else {
                             intent = new Intent(this,MemberActivity.class);
                             startActivity(intent);
+                        }
+                    }
+                });
+    }
+
+    private void getGymName(String gymId) {
+        firestore.collection("gyms").whereEqualTo("gymId",gymId)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot d : task.getResult()) {
+                            AdminModel adminModel = d.toObject(AdminModel.class);
+                            AdminFragment2.gymName = adminModel.getGymName();
                         }
                     }
                 });
@@ -144,4 +166,6 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
         intent = new Intent(this,LoginActivity.class);
         startActivity(intent);
     }
+
+
 }

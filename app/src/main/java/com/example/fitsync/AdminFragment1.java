@@ -33,7 +33,7 @@ public class AdminFragment1 extends Fragment {
                         .replace(R.id.frame,new MembersListFragment()).commit();
             } else if (item.getItemId() == R.id.earnings) {
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame,new MembersListFragment()).commit();
+                        .replace(R.id.frame,new EarningsFragment()).commit();
             }
             return true;
         });

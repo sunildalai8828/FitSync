@@ -1,8 +1,18 @@
 package com.example.fitsync.models;
 
+import java.util.Map;
+
 public class MemberModel {
-    String firstName,lastName,gender,memberUsername,memberPassword,
-            dateOfJoining,dateOfEnding,membershipPlan,modeOfPayment,payment;
+    String firstName;
+    String lastName;
+    String gender;
+    String memberUsername;
+    String memberPassword;
+    Map<String, String> dateOfJoining;
+    String dateOfEnding;
+    String membershipPlan;
+    String modeOfPayment;
+    String payment;
     Boolean paymentStatus;
     TrainerSubscriptionModel trainerSubscriptionPlan;
 
@@ -10,8 +20,8 @@ public class MemberModel {
     }
 
     public MemberModel(String firstName, String lastName, String gender, String memberUsername,
-                       String memberPassword, String dateOfJoining, String dateOfEnding, String membershipPlan
-    ,String modeOfPayment,String payment,Boolean paymentStatus,TrainerSubscriptionModel trainerSubscriptionPlan) {
+                       String memberPassword, Map<String, String> dateOfJoining, String dateOfEnding, String membershipPlan
+    , String modeOfPayment, String payment, Boolean paymentStatus, TrainerSubscriptionModel trainerSubscriptionPlan) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -66,11 +76,11 @@ public class MemberModel {
         this.memberPassword = memberPassword;
     }
 
-    public String getDateOfJoining() {
+    public Map<String, String> getDateOfJoining() {
         return dateOfJoining;
     }
 
-    public void setDateOfJoining(String dateOfJoining) {
+    public void setDateOfJoining(Map<String, String> dateOfJoining) {
         this.dateOfJoining = dateOfJoining;
     }
 

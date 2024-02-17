@@ -51,4 +51,5 @@ dependencies {
 
     implementation("com.hbb20:ccp:2.5.0")
     implementation("com.razorpay:checkout:1.5.16")
+    implementation("com.jjoe64:graphview:4.2.2")
 }

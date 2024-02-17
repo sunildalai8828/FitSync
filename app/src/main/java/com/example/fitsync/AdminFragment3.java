@@ -46,6 +46,15 @@ public class AdminFragment3 extends Fragment {
             Intent intent = new Intent(getContext(), AdminComplaintBoxActivity.class);
             startActivity(intent);
         });
+
+        logout_textview.setOnClickListener(view1 -> {
+            LoginActivity.sharedPreferences.edit().remove("username").apply();
+            LoginActivity.sharedPreferences.edit().remove("password").apply();
+            LoginActivity.sharedPreferences.edit().remove("usertype").apply();
+            LoginActivity.sharedPreferences.edit().remove("logged").apply();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        });
         return view;
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EarningsFragment">
+
+    <TextView
+        android:id="@+id/yearSelection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Year"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:textSize="20dp"/>
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/earningsGraph"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_below="@id/yearSelection"/>
+
+</RelativeLayout>

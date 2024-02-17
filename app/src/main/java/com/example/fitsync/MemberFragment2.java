@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -76,14 +77,17 @@ Calendar cal = Calendar.getInstance();
                         if (task.isSuccessful()) {
                             DocumentSnapshot documentSnapshot = task.getResult();
                             notepad.setText(documentSnapshot.getString("note"));
+                        } else {
+                            Toast.makeText(getContext(), "No Text Found", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), "No Text Found", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
-    static void getdetails(String g,String u){
-        gymid = g;
-        username = u;
-    };
 
 }

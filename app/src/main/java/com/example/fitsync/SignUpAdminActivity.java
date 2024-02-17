@@ -17,6 +17,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 public class SignUpAdminActivity extends AppCompatActivity {
     EditText adminNameEditText,gymNameEditText,branchNameEditText,usernameEditText,passwordEditText;
     Button button;
@@ -25,8 +29,7 @@ public class SignUpAdminActivity extends AppCompatActivity {
 
     FirebaseFirestore firestore;
     AdminModel adminModel;
-//    SharedPreferences sharedPreferences=getSharedPreferences("mypreferences",MODE_PRIVATE);
-//    SharedPreferences.Editor editor=sharedPreferences.edit();
+    static int createdYear = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,17 +89,22 @@ public class SignUpAdminActivity extends AppCompatActivity {
         }else {
             adminModel = new AdminModel(username,password,adminName,gymName,gymId,branchName);
         }
-//        MembersListFragment.setgymid(gymId);
 
         firestore.collection("gyms").document(username).set(adminModel).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_LONG).show();
-//                editor.putString("username",username);
-//                editor.putString("control","admin");
-//                editor.apply();
-                Intent intent = new Intent(SignUpAdminActivity.this, AdminActivity.class);
-                intent.putExtra("username",adminModel.getAdminUsername());
+                Instant instant = null;
+                LocalDateTime currentDateTime = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    instant = Instant.now();
+                    currentDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+                    createdYear = currentDateTime.getYear();
+                }
+                Intent intent = new Intent(SignUpAdminActivity.this, LoadActivity.class);
+                intent.putExtra("username",username);
+                intent.putExtra("password",password);
+                intent.putExtra("usertype","admin");
                 startActivity(intent);
             }
         }).addOnFailureListener(new OnFailureListener() {

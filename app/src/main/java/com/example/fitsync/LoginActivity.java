@@ -1,6 +1,7 @@
 package com.example.fitsync;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -33,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     AdminModel adminModel;
     MemberModel memberModel;
     TrainerModel trainerModel;
+    static SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +48,14 @@ public class LoginActivity extends AppCompatActivity {
         button = findViewById(R.id.login_button);
         text = findViewById(R.id.sign_up_button);
 
+        sharedPreferences = getSharedPreferences("login",MODE_PRIVATE);
 
 
+        if (sharedPreferences.getBoolean("logged",false)) {
+            login(sharedPreferences.getString("username",null),
+                    sharedPreferences.getString("password",null),
+                    sharedPreferences.getString("usertype",null));
+        }
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -57,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (userType.equals("Member") || userType.equals("Trainer")) {
                     passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    text.setVisibility(View.GONE);
                 } else if (userType.equals("Admin")) {
                     text.setVisibility(View.VISIBLE);
                 } else {
@@ -112,11 +121,16 @@ public class LoginActivity extends AppCompatActivity {
                             adminModel = documentSnapshot.toObject(AdminModel.class);
                             if(username.equals(adminModel.getAdminUsername())
                                     && password.equals(adminModel.getAdminPassword())){
-                                Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
-                                intent.putExtra("username",adminModel.getAdminUsername());
-                                intent.putExtra("password",adminModel.getAdminPassword());
-                                intent.putExtra("usertype",userType);
-                                startActivity(intent);
+                                sharedPreferences.edit().putString("usertype","Admin").apply();
+                                sharedPreferences.edit().putString("username",adminModel.getAdminUsername()).apply();
+                                sharedPreferences.edit().putString("password",adminModel.getAdminPassword()).apply();
+                                sharedPreferences.edit().putBoolean("logged",true).apply();
+                                login(adminModel.getAdminUsername(), adminModel.getAdminPassword() ,userType);
+//                                Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
+//                                intent.putExtra("username",adminModel.getAdminUsername());
+//                                intent.putExtra("password",adminModel.getAdminPassword());
+//                                intent.putExtra("usertype",userType);
+//                                startActivity(intent);
                                 Toast.makeText(getApplicationContext(),"Logged in!",Toast.LENGTH_LONG).show();
                             }
                         } else {
@@ -137,11 +151,16 @@ public class LoginActivity extends AppCompatActivity {
                                 memberModel = documentSnapshot.toObject(MemberModel.class);
                                 if(username.equals(memberModel.getMemberUsername())
                                         && password.equals(memberModel.getMemberPassword())){
-                                    Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
-                                    intent.putExtra("username",memberModel.getMemberUsername());
-                                    intent.putExtra("password",memberModel.getMemberPassword());
-                                    intent.putExtra("usertype",userType);
-                                    startActivity(intent);
+                                    sharedPreferences.edit().putString("usertype","Member").apply();
+                                    sharedPreferences.edit().putString("username",memberModel.getMemberUsername()).apply();
+                                    sharedPreferences.edit().putString("password", memberModel.getMemberPassword()).apply();
+                                    sharedPreferences.edit().putBoolean("logged",true).apply();
+                                    login(memberModel.getMemberUsername(),memberModel.getMemberPassword(),userType);
+//                                    Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
+//                                    intent.putExtra("username",memberModel.getMemberUsername());
+//                                    intent.putExtra("password",memberModel.getMemberPassword());
+//                                    intent.putExtra("usertype",userType);
+//                                    startActivity(intent);
                                     Toast.makeText(getApplicationContext(),"Logged in!",Toast.LENGTH_LONG).show();
                                 }
                             }else {
@@ -164,11 +183,16 @@ public class LoginActivity extends AppCompatActivity {
                                 trainerModel = documentSnapshot.toObject(TrainerModel.class);
                                 if(username.equals(trainerModel.getTrainerUsername())
                                         && password.equals(trainerModel.getTrainerPassword())){
-                                    Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
-                                    intent.putExtra("username",trainerModel.getTrainerUsername());
-                                    intent.putExtra("password",trainerModel.getTrainerPassword());
-                                    intent.putExtra("usertype",userType);
-                                    startActivity(intent);
+                                    sharedPreferences.edit().putString("usertype","Trainer").apply();
+                                    sharedPreferences.edit().putString("username", trainerModel.getTrainerUsername()).apply();
+                                    sharedPreferences.edit().putString("password",trainerModel.getTrainerPassword()).apply();
+                                    sharedPreferences.edit().putBoolean("logged",true).apply();
+                                    login(trainerModel.getTrainerUsername(),trainerModel.getTrainerPassword(),userType);
+//                                    Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
+//                                    intent.putExtra("username",trainerModel.getTrainerUsername());
+//                                    intent.putExtra("password",trainerModel.getTrainerPassword());
+//                                    intent.putExtra("usertype",userType);
+//                                    startActivity(intent);
                                     Toast.makeText(getApplicationContext(),"Logged in!",Toast.LENGTH_LONG).show();
                                 }
                             }else {
@@ -177,6 +201,13 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
 
+    void login(String username,String password,String userType){
+        Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
+        intent.putExtra("username",username);
+        intent.putExtra("password",password);
+        intent.putExtra("usertype",userType);
+        startActivity(intent);
     }
 }

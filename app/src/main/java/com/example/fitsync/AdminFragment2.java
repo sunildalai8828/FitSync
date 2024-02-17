@@ -1,7 +1,10 @@
 package com.example.fitsync;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.fitsync.models.MemberModel;
@@ -30,18 +35,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdminFragment2 extends Fragment {
     Spinner spinner,plans,experience;
     EditText firstNameEditText,lastNameEditText,phoneNumberEditText,gymIDEditText,dateOfJoiningEditText;
     Button create;
     RadioGroup genderGroup,paymentGroup;
-    String userType="",firstName,lastName,phoneNumber,gymID,gender="",
+    String userType="",firstName,lastName,phoneNumber,gender="",
             dateOfJoining="",plan="",dateOfEnding,modeOfPayment="",amount,yearsOfExperience="";
 
     FirebaseFirestore firestore;
     MemberModel memberModel;
     Boolean paymentStatus;
+    static String gymName="";
+    Map<String, String> date = new HashMap<>();
+    static String gymID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +71,8 @@ public class AdminFragment2 extends Fragment {
 
         plans = view.findViewById(R.id.plan_spinner);
         paymentGroup = view.findViewById(R.id.mode_of_payment_group);
+
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -103,6 +115,8 @@ public class AdminFragment2 extends Fragment {
                         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                             dateOfJoining = i+"-"+(i1+1)+"-"+i2;
                             dateOfJoiningEditText.setText(dateOfJoining);
+                            date.put("date", dateOfJoining);
+                            date.put("year", String.valueOf(i));
                         }
                     },
                     year,month,day);
@@ -118,8 +132,8 @@ public class AdminFragment2 extends Fragment {
         });
 
         create.setOnClickListener(v->{
+            checkSMSPermission();
             plan = plans.getSelectedItem().toString();
-
 
             if (userType.equals("Trainer")) {
                 yearsOfExperience = experience.getSelectedItem().toString();
@@ -179,7 +193,6 @@ public class AdminFragment2 extends Fragment {
             firstName = firstNameEditText.getText().toString().trim();
             lastName = lastNameEditText.getText().toString().trim();
             phoneNumber = phoneNumberEditText.getText().toString();
-            gymID = gymIDEditText.getText().toString();
             checkUserExistence();
         });
 
@@ -209,6 +222,8 @@ public class AdminFragment2 extends Fragment {
     }
 
     void createDateOfEnding() {
+
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
         try {
@@ -266,13 +281,14 @@ public class AdminFragment2 extends Fragment {
 
     public void createMemberUser(){
         memberModel = new MemberModel(firstName,lastName,gender,phoneNumber,gymID,
-                dateOfJoining,dateOfEnding,plan,modeOfPayment,amount,paymentStatus,null);
+                date,dateOfEnding,plan,modeOfPayment,amount,paymentStatus,null);
 
         firestore.collection("gymIDs/"+gymID+"/"+userType)
                 .document(phoneNumber).set(memberModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(getContext(),"Account created!",Toast.LENGTH_LONG).show();
+                        sendSMSToMember();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -280,6 +296,35 @@ public class AdminFragment2 extends Fragment {
 
                     }
                 });
+    }
+
+    private void checkSMSPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+        } else {
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},
+                    100);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100 && grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED) {
+
+        } else {
+            Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void sendSMSToMember() {
+        String message = "Hello, " + firstName+" "+lastName + "\nGreetings From "+ gymName +
+                "These are your Login Credentials for FitSync App" +
+                "\nUsername : " +phoneNumber + "\nPassword : "+gymID;
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumber,null,message,null,null);
+        Toast.makeText(getContext(), "Message Sent", Toast.LENGTH_SHORT).show();
     }
 
     public void createTrainerUser(){
@@ -290,6 +335,7 @@ public class AdminFragment2 extends Fragment {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(getContext(),"Account created!",Toast.LENGTH_LONG).show();
+                        sendSMSToMember();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
