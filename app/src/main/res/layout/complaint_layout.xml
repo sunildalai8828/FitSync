@@ -7,5 +7,21 @@
         android:id="@+id/complaint_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/name_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/complaint_display"
+        android:layout_centerHorizontal="true"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_below="@id/name_display"
+        />
 </RelativeLayout>

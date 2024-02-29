@@ -1,6 +1,7 @@
 package com.example.fitsync;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +23,15 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MemberFragment2 extends Fragment {
+public class MemberNoteFragment extends Fragment {
 CalendarView calendar;
 EditText notepad;
 Button addnote;
-static String gymid,username,date;
+static String gymid,username;
+String date;
 FirebaseFirestore Db = FirebaseFirestore.getInstance();
 Calendar cal = Calendar.getInstance();
-    public MemberFragment2() {
+    public MemberNoteFragment() {
         // Required empty public constructor
     }
 
@@ -76,16 +78,23 @@ Calendar cal = Calendar.getInstance();
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot documentSnapshot = task.getResult();
-                            notepad.setText(documentSnapshot.getString("note"));
+                            if (documentSnapshot.exists()) {
+                                notepad.setText(documentSnapshot.getString("note"));
+                            } else {
+                                notepad.setText("");
+                                Toast.makeText(getContext(), "No Text Found", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-                            Toast.makeText(getContext(), "No Text Found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Error Retriving Data", Toast.LENGTH_SHORT).show();
+                            Log.e("NotePad","Error :",task.getException());
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "No Text Found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                        Log.e("NotePad","Error :",e);
                     }
                 });
     }

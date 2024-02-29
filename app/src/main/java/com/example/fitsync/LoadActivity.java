@@ -1,13 +1,17 @@
 package com.example.fitsync;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.fitsync.models.AdminModel;
 import com.example.fitsync.models.MemberModel;
@@ -17,11 +21,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LoadActivity extends AppCompatActivity implements PaymentResultListener {
 
@@ -37,19 +45,7 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
         password = getIntent().getStringExtra("password");
         userType = getIntent().getStringExtra("usertype");
 
-        switch (userType) {
-            case "Admin":
-                getAdminDetails();
-                break;
-
-            case "Member":
-                getMemberDetails();
-                break;
-
-            case "Trainer":
-                getTrainerDetails();
-                break;
-        }
+        checkSMSPermission();
     }
 
     void getAdminDetails() {
@@ -58,16 +54,23 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
                     if (task.isSuccessful()) {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         AdminModel adminModel = documentSnapshot.toObject(AdminModel.class);
+
+                        FirebaseMessaging.getInstance().subscribeToTopic(adminModel.getGymId());
+                        FirebaseMessaging.getInstance().subscribeToTopic("admin");
+
                         MembersListFragment.gym_Id = adminModel.getGymId();
-                        AdminFragment3.username=adminModel.getAdminUsername();
+                        AdminProfileFragment.username=adminModel.getAdminUsername();
                         AdminComplaintBoxActivity.gym_id = adminModel.getGymId();
-                        AdminFragment4.gym_id = adminModel.getGymId();
+                        AdminAssignFragment.gym_id = adminModel.getGymId();
                         EarningsFragment.gymId = adminModel.getGymId();
-                        AdminFragment2.gymID = adminModel.getGymId();
+                        AdminAddFragment.gymID = adminModel.getGymId();
+                        SendMessageActivity.gymName = adminModel.getGymName();
+                        SendMessageActivity.gymId = adminModel.getGymId();
                         getGymName(adminModel.getGymId());
                         createdYear = SignUpAdminActivity.createdYear;
                         intent = new Intent(LoadActivity.this,AdminActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 });
     }
@@ -78,23 +81,100 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
                     if (task.isSuccessful()) {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         MemberModel memberModel = documentSnapshot.toObject(MemberModel.class);
-                        MemberFragment1.gymId = password;
-                        MemberFragment1.username = memberModel.getMemberUsername();
+
+                        FirebaseMessaging.getInstance().subscribeToTopic(memberModel.getMemberPassword());
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        String currentDate = dateFormat.format(new Date());
+
+                        MemberProfileFragment.gymId = password;
+                        MemberProfileFragment.username = memberModel.getMemberUsername();
+                        MemberNoteFragment.gymid = password;
+                        MemberNoteFragment.username = memberModel.getMemberUsername();
+
+                        getGymName(password);
+
                         ComplaintBoxActivity.gym_id = password;
+                        ComplaintBoxActivity.member_name = memberModel.getFirstName() +" "+ memberModel.getLastName();
                         TrainerSubscriptionActivity.gym_Id = password;
 
                         if (memberModel.getModeOfPayment().equals("Online") && memberModel.getPaymentStatus().equals(false)) {
                             payFirst(memberModel.getFirstName()+" "+memberModel.getLastName(),
                                     memberModel.getMemberUsername(),
                                     memberModel.getPayment());
-                        } else {
+                        }
+                        else if (currentDate.equals(memberModel.getDateOfEnding())) {
+                            Toast.makeText(this, "Your Member Subscription Ended", Toast.LENGTH_SHORT).show();
+                            LoginActivity.sharedPreferences.edit().remove("logged").apply();
+                            intent = new Intent(this,LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else {
                             intent = new Intent(this,MemberActivity.class);
                             startActivity(intent);
+                            finish();
                         }
                     }
                 });
     }
 
+    private void checkSMSPermission() {
+        if (ContextCompat.checkSelfPermission(LoadActivity.this, android.Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED) {
+            switch (userType) {
+                case "Admin":
+                    getAdminDetails();
+                    break;
+
+                case "Member":
+                    getMemberDetails();
+                    break;
+
+                case "Trainer":
+                    getTrainerDetails();
+                    break;
+            }
+        } else {
+            ActivityCompat.requestPermissions(LoadActivity.this,new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                    100);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100 && grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED) {
+            switch (userType) {
+                case "Admin":
+                    getAdminDetails();
+                    break;
+
+                case "Member":
+                    getMemberDetails();
+                    break;
+
+                case "Trainer":
+                    getTrainerDetails();
+                    break;
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "Notification Permission Denied", Toast.LENGTH_SHORT).show();
+            switch (userType) {
+                case "Admin":
+                    getAdminDetails();
+                    break;
+
+                case "Member":
+                    getMemberDetails();
+                    break;
+
+                case "Trainer":
+                    getTrainerDetails();
+                    break;
+            }
+        }
+    }
     private void getGymName(String gymId) {
         firestore.collection("gyms").whereEqualTo("gymId",gymId)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -102,7 +182,8 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot d : task.getResult()) {
                             AdminModel adminModel = d.toObject(AdminModel.class);
-                            AdminFragment2.gymName = adminModel.getGymName();
+                            AdminAddFragment.gymName = adminModel.getGymName();
+                            ComplaintBoxActivity.gymName = adminModel.getGymName();
                         }
                     }
                 });
@@ -138,11 +219,20 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
                     if (task.isSuccessful()) {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         TrainerModel trainerModel = documentSnapshot.toObject(TrainerModel.class);
-                        TrainerFragment2.gymId = password;
-                        TrainerFragment2.username = trainerModel.getTrainerUsername();
+
+                        FirebaseMessaging.getInstance().subscribeToTopic(trainerModel.getTrainerPassword());
+
+                        TrainerProfileFragment.gymId = password;
+                        TrainerProfileFragment.username = trainerModel.getTrainerUsername();
                         ComplaintBoxActivity.gym_id = password;
+                        ComplaintBoxActivity.member_name = trainerModel.getFirstName() +" "+ trainerModel.getLastName();
+                        TrainerClientFragment.gymId = password;
+                        TrainerClientFragment.username = trainerModel.getTrainerUsername();
+                        getGymName(password);
+
                         intent = new Intent(this,TrainerActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 });
     }
@@ -156,6 +246,7 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
                 .addOnCompleteListener(task1 -> {
                     intent = new Intent(this,MemberActivity.class);
                     startActivity(intent);
+                    finish();
                 });
 
     }

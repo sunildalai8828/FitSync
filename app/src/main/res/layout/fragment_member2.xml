@@ -3,16 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MemberFragment2">
+    tools:context=".MemberNoteFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <CalendarView
-        android:id="@+id/calendar_view"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"/>
+        <CalendarView
+            android:id="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:focusedMonthDateColor="@color/main" />
     <EditText
         android:id="@+id/notepad_view"
         android:layout_width="match_parent"
@@ -23,14 +24,16 @@
         android:background="@drawable/background_border"
         android:layout_margin="15dp"/>
 
-    <Button
-        android:id="@+id/addnote_view"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/notepad_view"
-        android:layout_marginTop="15dp"
-        android:layout_centerHorizontal="true"
-        android:text="Add"/>
+        <Button
+            android:id="@+id/addnote_view"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/notepad_view"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/main"
+            android:text="Add"
+            android:textColor="@color/black" />
 
     </RelativeLayout>
 </ScrollView>

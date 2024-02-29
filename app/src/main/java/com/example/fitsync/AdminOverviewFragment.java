@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class AdminFragment1 extends Fragment {
-    public AdminFragment1() {
+public class AdminOverviewFragment extends Fragment {
+    public AdminOverviewFragment() {
         // Required empty public constructor
     }
 

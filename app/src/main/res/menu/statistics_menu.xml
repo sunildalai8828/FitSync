@@ -3,9 +3,11 @@
 
     <item
         android:id="@+id/members"
+        android:icon="@drawable/assign"
         android:title="Members/Trainers"/>
     <item
         android:id="@+id/earnings"
+        android:icon="@drawable/stat"
         android:title="Earnings"/>
 
 </menu>

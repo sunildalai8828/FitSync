@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".AdminFragment1">
+    tools:context=".AdminOverviewFragment">
 
    <RelativeLayout
        android:layout_width="match_parent"
@@ -16,6 +16,13 @@
           android:layout_height="wrap_content"
           android:layout_alignParentTop="true"
           app:menu="@menu/statistics_menu"/>
+
+      <com.google.android.material.divider.MaterialDivider
+          android:id="@+id/divider"
+          android:layout_width="wrap_content"
+          android:layout_height="2dp"
+          android:layout_below="@id/stat_nav"
+          />
 
       <FrameLayout
           android:id="@+id/frame"

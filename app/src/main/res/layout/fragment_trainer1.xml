@@ -3,10 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TrainerFragment1">
+    tools:context=".TrainerClientFragment">
+
+    <TextView
+        android:id="@+id/heading"
+        android:text="Clients"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_below="@id/heading"
+        />
 
     <ListView
         android:id="@+id/client_overview"
+        android:layout_below="@id/divider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

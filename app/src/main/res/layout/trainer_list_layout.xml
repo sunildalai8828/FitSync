@@ -58,10 +58,11 @@
                 android:id="@+id/add_member"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add"
-                android:backgroundTint="@color/main"
                 android:layout_below="@id/trainer_experience_display"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="@color/main"
+                android:text="Add"
+                android:textColor="@color/black" />
 
         </RelativeLayout>
 
@@ -125,9 +126,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/mode_of_payment_group"
-            android:text="Assign"
+            android:layout_centerHorizontal="true"
             android:backgroundTint="@color/main"
-            android:layout_centerHorizontal="true"/>
+            android:text="Assign"
+            android:textColor="@color/black" />
 
     </RelativeLayout>
 

@@ -3,9 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminFragment4">
+    tools:context=".AdminAssignFragment">
 
+    <TextView
+        android:id="@+id/heading"
+        android:text="Trainers List"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_below="@id/heading"
+        />
+    <TextView
+        android:id="@+id/no_trainers"
+        android:text="No Trainers Present"
+        android:layout_centerInParent="true"
+        android:textSize="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <ListView
+        android:layout_below="@id/divider"
         android:id="@+id/trainer_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

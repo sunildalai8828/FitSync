@@ -104,7 +104,7 @@ public class SignUpAdminActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignUpAdminActivity.this, LoadActivity.class);
                 intent.putExtra("username",username);
                 intent.putExtra("password",password);
-                intent.putExtra("usertype","admin");
+                intent.putExtra("usertype","Admin");
                 startActivity(intent);
             }
         }).addOnFailureListener(new OnFailureListener() {

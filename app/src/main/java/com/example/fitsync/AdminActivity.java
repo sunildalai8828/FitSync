@@ -18,17 +18,17 @@ public class AdminActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminFragment1()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminOverviewFragment()).commit();
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.admin_overview) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminFragment1()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminOverviewFragment()).commit();
             } else if (item.getItemId() == R.id.add) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminFragment2()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminAddFragment()).commit();
             } else if (item.getItemId() == R.id.admin_profile) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminFragment3()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminProfileFragment()).commit();
             } else if (item.getItemId() == R.id.assign_trainer) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminFragment4()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new AdminAssignFragment()).commit();
             }
             return true; // Return true to indicate that the event was handled
         });

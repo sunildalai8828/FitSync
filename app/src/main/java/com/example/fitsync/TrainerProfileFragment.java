@@ -11,19 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.fitsync.models.AdminModel;
-import com.example.fitsync.models.MemberModel;
-import com.example.fitsync.models.TrainerSubscriptionModel;
+import com.example.fitsync.models.TrainerModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MemberFragment1#newInstance} factory method to
+ * Use the {@link TrainerProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MemberFragment1 extends Fragment  {
+public class TrainerProfileFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +34,7 @@ public class MemberFragment1 extends Fragment  {
     private String mParam1;
     private String mParam2;
 
-    public MemberFragment1() {
+    public TrainerProfileFragment() {
         // Required empty public constructor
     }
 
@@ -44,11 +44,11 @@ public class MemberFragment1 extends Fragment  {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MemberFragment1.
+     * @return A new instance of fragment StaffFragment2.
      */
     // TODO: Rename and change types and number of parameters
-    public static MemberFragment1 newInstance(String param1, String param2) {
-        MemberFragment1 fragment = new MemberFragment1();
+    public static TrainerProfileFragment newInstance(String param1, String param2) {
+        TrainerProfileFragment fragment = new TrainerProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,48 +65,36 @@ public class MemberFragment1 extends Fragment  {
         }
     }
 
-    TextView member_name_textview,gymid_textview,gymname_textview,trainer_subscription_textview,
-            complaint_box_textview,logout_textview;
-    FirebaseFirestore firebase=FirebaseFirestore.getInstance();
     static String gymId,username;
-    String fullName;
+    TextView trainer_name_textview,gymid_textview,gymname_textview,complaint_box_textview,logout_textview;
+    FirebaseFirestore firebase = FirebaseFirestore.getInstance();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_member1, container, false);
+        View view = inflater.inflate(R.layout.fragment_trainer2, container, false);
 
-        member_name_textview = view.findViewById(R.id.member_name);
+        trainer_name_textview = view.findViewById(R.id.trainer_name);
         gymname_textview = view.findViewById(R.id.gym_name);
         gymid_textview = view.findViewById(R.id.gym_id);
-        trainer_subscription_textview = view.findViewById(R.id.trainer_subscription);
-        complaint_box_textview = view.findViewById(R.id.complain_box_view);
         logout_textview = view.findViewById(R.id.logout_member);
+        complaint_box_textview = view.findViewById(R.id.complain_box_view);
 
         findGymName();
 
-        firebase.collection("gymIDs").document(gymId).collection("Member")
+        firebase.collection("gymIDs").document(gymId).collection("Trainer")
                 .document(username).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot documentSnapshot = task.getResult();
-                            MemberModel memberModel = documentSnapshot.toObject(MemberModel.class);
-                            TrainerSubscriptionModel trainerSubscriptionModel = memberModel.getTrainerSubscriptionPlan();
-                            member_name_textview.setText(memberModel.getFirstName()+" "+memberModel.getLastName());
+                            TrainerModel trainerModel = documentSnapshot.toObject(TrainerModel.class);
+                            trainer_name_textview.setText(trainerModel.getFirstName()+" "+trainerModel.getLastName());
                             gymid_textview.setText(gymId);
-                            TrainerSubscriptionActivity.fullName = memberModel.getFirstName() + " " + memberModel.getLastName();
-                            TrainerSubscriptionActivity.phone = memberModel.getMemberUsername();
-
                         }
                     }
                 });
-
-        trainer_subscription_textview.setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), TrainerSubscriptionActivity.class);
-            startActivity(intent);
-        });
 
         complaint_box_textview.setOnClickListener(view1 -> {
             Intent intent = new Intent(getContext(), ComplaintBoxActivity.class);
@@ -118,12 +106,15 @@ public class MemberFragment1 extends Fragment  {
             LoginActivity.sharedPreferences.edit().remove("password").apply();
             LoginActivity.sharedPreferences.edit().remove("usertype").apply();
             LoginActivity.sharedPreferences.edit().remove("logged").apply();
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(gymid_textview.getText().toString());
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
         });
 
         return view;
     }
+
+
 
     void findGymName() {
         firebase.collection("gyms").whereEqualTo("gymId",gymId).get()

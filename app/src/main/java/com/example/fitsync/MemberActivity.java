@@ -15,13 +15,13 @@ public class MemberActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new MemberFragment1()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new MemberNoteFragment()).commit();
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.member_profile) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new MemberFragment1()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new MemberProfileFragment()).commit();
             } else if (item.getItemId() == R.id.track_workouts) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new MemberFragment2()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new MemberNoteFragment()).commit();
             }
 
             return true; // Return true to indicate that the event was handled

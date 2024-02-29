@@ -126,11 +126,6 @@ public class LoginActivity extends AppCompatActivity {
                                 sharedPreferences.edit().putString("password",adminModel.getAdminPassword()).apply();
                                 sharedPreferences.edit().putBoolean("logged",true).apply();
                                 login(adminModel.getAdminUsername(), adminModel.getAdminPassword() ,userType);
-//                                Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
-//                                intent.putExtra("username",adminModel.getAdminUsername());
-//                                intent.putExtra("password",adminModel.getAdminPassword());
-//                                intent.putExtra("usertype",userType);
-//                                startActivity(intent);
                                 Toast.makeText(getApplicationContext(),"Logged in!",Toast.LENGTH_LONG).show();
                             }
                         } else {
@@ -156,11 +151,6 @@ public class LoginActivity extends AppCompatActivity {
                                     sharedPreferences.edit().putString("password", memberModel.getMemberPassword()).apply();
                                     sharedPreferences.edit().putBoolean("logged",true).apply();
                                     login(memberModel.getMemberUsername(),memberModel.getMemberPassword(),userType);
-//                                    Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
-//                                    intent.putExtra("username",memberModel.getMemberUsername());
-//                                    intent.putExtra("password",memberModel.getMemberPassword());
-//                                    intent.putExtra("usertype",userType);
-//                                    startActivity(intent);
                                     Toast.makeText(getApplicationContext(),"Logged in!",Toast.LENGTH_LONG).show();
                                 }
                             }else {
@@ -188,11 +178,6 @@ public class LoginActivity extends AppCompatActivity {
                                     sharedPreferences.edit().putString("password",trainerModel.getTrainerPassword()).apply();
                                     sharedPreferences.edit().putBoolean("logged",true).apply();
                                     login(trainerModel.getTrainerUsername(),trainerModel.getTrainerPassword(),userType);
-//                                    Intent intent = new Intent(LoginActivity.this, LoadActivity.class);
-//                                    intent.putExtra("username",trainerModel.getTrainerUsername());
-//                                    intent.putExtra("password",trainerModel.getTrainerPassword());
-//                                    intent.putExtra("usertype",userType);
-//                                    startActivity(intent);
                                     Toast.makeText(getApplicationContext(),"Logged in!",Toast.LENGTH_LONG).show();
                                 }
                             }else {
@@ -209,5 +194,6 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("password",password);
         intent.putExtra("usertype",userType);
         startActivity(intent);
+        finish();
     }
 }

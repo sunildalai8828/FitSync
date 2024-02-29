@@ -2,8 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/staff_overview"
+        android:icon="@drawable/overview"
         android:title="Overview" />
     <item
         android:id="@+id/staff_profile"
+        android:icon="@drawable/profile"
         android:title="Profile"/>
 </menu>

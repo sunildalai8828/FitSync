@@ -14,10 +14,16 @@
         android:gravity="center"
         android:textSize="20dp"/>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_below="@id/yearSelection"
+        />
     <com.jjoe64.graphview.GraphView
         android:id="@+id/earningsGraph"
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:layout_below="@id/yearSelection"/>
+        android:layout_below="@id/divider"/>
 
 </RelativeLayout>

@@ -9,14 +9,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -26,40 +22,34 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ComplaintBoxActivity extends AppCompatActivity {
+public class SendMessageActivity extends AppCompatActivity {
 
-    EditText complaint_edit_text;
-    Button submit_button;
-    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    static String gym_id,member_name,gymName;
+    static String gymId,gymName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_complaint_box);
+        setContentView(R.layout.activity_send_message);
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
-        int height = displayMetrics.heightPixels;
-        getWindow().setLayout((int) (width*.8),(int) (height*.6));
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        getWindow().setLayout((int)(width*.8),(int)(height*.4));
 
-        complaint_edit_text = findViewById(R.id.complaint_edit_text);
-        submit_button = findViewById(R.id.submit_button);
+        EditText messageText = findViewById(R.id.send_message_textview);
+        Button sendButton = findViewById(R.id.send_button);
 
-        submit_button.setOnClickListener(view -> {
-            Map<String,String> complaint = new HashMap<>();
-            complaint.put("complaint",complaint_edit_text.getText().toString());
-            complaint.put("member",member_name);
 
-            firestore.collection("gymIDs").document(gym_id).collection("Complaints")
-                    .add(complaint).addOnCompleteListener(task -> {
-                        Toast.makeText(this, "Complaint Sent", Toast.LENGTH_SHORT).show();
-                        sendNotification("New Complaint");
-                        finish();
-                    });
+        sendButton.setOnClickListener(view2 -> {
+            if (messageText.getText().toString().isEmpty()) {
+                messageText.setError("Message should not be empty");
+                return;
+            }
+            sendNotification(messageText.getText().toString());
+            finish();
         });
-    }
 
+    }
     public void sendNotification(String message) {
         JSONObject jsonObject = new JSONObject();
         JSONObject notificationObj = new JSONObject();
@@ -68,7 +58,7 @@ public class ComplaintBoxActivity extends AppCompatActivity {
             notificationObj.put("body",message);
 
             jsonObject.put("notification",notificationObj);
-            jsonObject.put("to","/topics/admin");
+            jsonObject.put("to","/topics/"+gymId);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -98,6 +88,6 @@ public class ComplaintBoxActivity extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(ComplaintBoxActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(SendMessageActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
     }
 }

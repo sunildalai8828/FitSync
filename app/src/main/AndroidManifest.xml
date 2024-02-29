@@ -5,7 +5,11 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,8 +21,18 @@
         android:theme="@style/Base.Theme.FitSync"
         tools:targetApi="31">
         <activity
-            android:name=".PaymentActivity"
-            android:exported="false" />
+            android:name=".SendMessageActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FitSync.PopUp"/>
+
+        <service
+            android:name=".FCMNotification"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name="com.razorpay.CheckoutActivity"
             android:exported="false" />

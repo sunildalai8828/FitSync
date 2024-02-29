@@ -37,6 +37,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("com.google.firebase:firebase-firestore:24.9.1")
     implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -52,4 +53,5 @@ dependencies {
     implementation("com.hbb20:ccp:2.5.0")
     implementation("com.razorpay:checkout:1.5.16")
     implementation("com.jjoe64:graphview:4.2.2")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }

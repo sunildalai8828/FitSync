@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MemberFragment1">
+    tools:context=".MemberProfileFragment">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -32,13 +32,20 @@
         android:text="Gym Id : "
         android:layout_centerHorizontal="true"
         android:layout_below="@id/gym_name" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_below="@id/gym_id"
+        />
     <TextView
         android:id="@+id/trainer_subscription"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@+id/gym_id"
         android:paddingLeft="10dp"
-        android:layout_marginTop="69dp"
+        android:layout_marginTop="40dp"
         android:text="Trainer Subscription "
         android:textSize="20dp"
         android:gravity="center_vertical"/>

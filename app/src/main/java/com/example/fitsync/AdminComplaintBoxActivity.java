@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AdminComplaintBoxActivity extends AppCompatActivity {
 
@@ -35,7 +36,6 @@ public class AdminComplaintBoxActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.complaint_list);
         getdata();
-
     }
 
     private void getdata(){
@@ -45,12 +45,13 @@ public class AdminComplaintBoxActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
-                            List<String> data = new ArrayList<>();
+                            List<Map<String,Object>> data = new ArrayList<>();
                             for (DocumentSnapshot documentSnapshot : task.getResult()){
-                                String complaint = documentSnapshot.getString("complaint");
-                                data.add(complaint);
+                                Map<String,Object> documentData = documentSnapshot.getData();
+                                data.add(documentData);
                             }
-                            AdapterClass adapterClass = new AdapterClass(getApplicationContext(),data);
+                            AdapterClass adapterClass = new AdapterClass(AdminComplaintBoxActivity.this,
+                                    data);
                             listView.setAdapter(adapterClass);
                         }else {
                             Toast.makeText(getApplicationContext(),"ERROR"+task.getException(),Toast.LENGTH_SHORT).show();
@@ -58,27 +59,29 @@ public class AdminComplaintBoxActivity extends AppCompatActivity {
                     }
                 });
     }
-    public static class AdapterClass extends ArrayAdapter<String> {
 
-        public AdapterClass(@NonNull Context context, List<String>data) {
-            super(context, R.layout.complaint_layout,data);
+    public static class AdapterClass extends ArrayAdapter<Map<String,Object>> {
+
+        public AdapterClass(@NonNull Context context, List<Map<String,Object>> data) {
+            super(context, R.layout.complaint_layout, data);
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            if(convertView==null){
+            if (convertView==null) {
                 convertView = LayoutInflater.from(getContext()).inflate(
-                        R.layout.complaint_layout,parent
-                        ,false);
+                        R.layout.complaint_layout,parent,false);
             }
-            TextView complaint_textview = convertView.findViewById(R.id.complaint_display);
 
-            String complaint = getItem(position);
+            TextView complaint = convertView.findViewById(R.id.complaint_display);
+            TextView name = convertView.findViewById(R.id.name_display);
 
-            if (complaint!=null){
-                complaint_textview.setText("\""+complaint+"\"");
-            }
+            Map<String,Object> currentData = getItem(position);
+
+            complaint.setText("\"" + currentData.get("complaint").toString() + "\"");
+            name.setText("- " + currentData.get("member").toString());
+
             return convertView;
         }
     }

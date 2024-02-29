@@ -2,14 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/admin_overview"
+        android:icon="@drawable/overview"
         android:title="Overview" />
     <item
         android:id="@+id/add"
-        android:title="Add" />
+        android:icon="@drawable/add"
+        android:title="Add Member" />
     <item
         android:id="@+id/assign_trainer"
+        android:icon="@drawable/assign"
         android:title="Assign Trainer" />
     <item
         android:id="@+id/admin_profile"
+        android:icon="@drawable/profile"
         android:title="Proifle" />
 </menu>

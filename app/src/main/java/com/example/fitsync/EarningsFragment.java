@@ -42,6 +42,7 @@ public class EarningsFragment extends Fragment {
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     List<Integer> monthlyEarnings = new ArrayList<>();
     static String gymId;
+    int currentYear = 0;
     String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +51,17 @@ public class EarningsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_earnings, container, false);
         yearSelection = view.findViewById(R.id.yearSelection);
         graphView = view.findViewById(R.id.earningsGraph);
+
+        Instant instant = null;
+        LocalDateTime currentDateTime = null;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            instant = Instant.now();
+            currentDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+            currentYear = currentDateTime.getYear();
+            year = String.valueOf(currentYear);
+            yearSelection.setText("Year : " + year);
+        }
 
         findEarnings();
 
@@ -70,6 +82,7 @@ public class EarningsFragment extends Fragment {
                             MemberModel memberModel = documentSnapshot.toObject(MemberModel.class);
                             monthlyEarnings.add(Integer.valueOf(memberModel.getPayment()));
                         }
+                        setGraphView();
                         Toast.makeText(getContext(), ""+monthlyEarnings.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -114,32 +127,22 @@ public class EarningsFragment extends Fragment {
         dialog.setContentView(R.layout.number_picker_dialog);
         NumberPicker yearPicker = dialog.findViewById(R.id.yearPicker);
 
-
-        Instant instant = null;
-        LocalDateTime currentDateTime = null;
-        int currentYear = 0;
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            instant = Instant.now();
-            currentDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-            currentYear = currentDateTime.getYear();
-        }
-
-        yearPicker.setMinValue(LoadActivity.createdYear);
+        yearPicker.setMinValue(currentYear);
         yearPicker.setMaxValue(currentYear);
+
+        year = String.valueOf(yearPicker.getValue());
 
         yearPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+
                 year = String.valueOf(oldVal);
                 year = String.valueOf(newVal);
-                yearSelection.setText("Year : " + year);
                 setGraphView();
             }
         });
+
         dialog.show();
-
-
     }
 
 }

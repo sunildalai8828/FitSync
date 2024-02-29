@@ -88,12 +88,14 @@ public class TrainerSubscriptionActivity extends AppCompatActivity implements Pa
                         DocumentSnapshot documentSnapshot = task.getResult();
                         MemberModel memberModel = documentSnapshot.toObject(MemberModel.class);
                         TrainerSubscriptionModel trainerSubscriptionModel = memberModel.getTrainerSubscriptionPlan();
-                        modeOfPayment = trainerSubscriptionModel.getModeOfPayment();
-                        paymentStatus = trainerSubscriptionModel.getPaymentStatus();
-                        amount = String.valueOf(trainerSubscriptionModel.getPayment());
-                        if (modeOfPayment.equals("Online") && paymentStatus == false) {
-                            trainer_info.setText("*Pay For Your Trainer Subscription*");
-                            payment_button.setVisibility(View.VISIBLE);
+                        if (trainerSubscriptionModel!=null) {
+                            modeOfPayment = trainerSubscriptionModel.getModeOfPayment();
+                            paymentStatus = trainerSubscriptionModel.getPaymentStatus();
+                            amount = String.valueOf(trainerSubscriptionModel.getPayment());
+                            if (modeOfPayment.equals("Online") && paymentStatus == false) {
+                                trainer_info.setText("*Pay For Your Trainer Subscription*");
+                                payment_button.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 });

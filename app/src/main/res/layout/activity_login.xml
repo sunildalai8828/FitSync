@@ -1,14 +1,16 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FDFDFD"
+    android:backgroundTint="#FDFDFD">
 
     <ImageView
         android:id="@+id/app_icon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="50dp"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/app_icon_2" />
 
 
     <Spinner
@@ -27,8 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/spinner"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:hint="Username" />
 
@@ -37,31 +39,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/username_edit_text"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:inputType="textPassword"
-        android:hint="Password" />
+        android:hint="Password"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/password_edit_text"
-        android:text="Login"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:textSize="20sp"
-        />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/main"
+        android:text="Login"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/sign_up_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/login_button"
-        android:text="Sign Up"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
-        android:textSize="20sp"
-        />
+        android:text="Sign Up"
+        android:textSize="20sp" />
 </RelativeLayout>

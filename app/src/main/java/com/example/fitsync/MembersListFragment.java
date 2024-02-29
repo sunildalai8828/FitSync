@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.fitsync.models.MemberModel;
+import com.example.fitsync.models.TrainerModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -66,23 +68,47 @@ public class MembersListFragment extends Fragment {
         }
     }
 
-    ListView listView;
-    FirebaseFirestore db;
+    ListView memberlistView;
+    ListView trainerListView;
+    static FirebaseFirestore db;
     static String gym_Id;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_members_list, container, false);
-        listView = view.findViewById(R.id.memberslist);
+        memberlistView = view.findViewById(R.id.memberslist);
+        trainerListView = view.findViewById(R.id.trainerslist);
         db=FirebaseFirestore.getInstance();
 
         Toast.makeText(getContext(), "GYM : "+gym_Id, Toast.LENGTH_SHORT).show();
-        getdata();
+        getMembersData();
+        getTrainersData();
         return view;
     }
 
-    private void getdata(){
+    private void getTrainersData() {
+        db.collection("gymIDs/"+gym_Id+"/Trainer")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            List<TrainerModel> data = new ArrayList<>();
+                            for (DocumentSnapshot documentSnapshot : task.getResult()){
+                                TrainerModel trainerModel = documentSnapshot.toObject(TrainerModel.class);
+                                data.add(trainerModel);
+                            }
+                            TrainerAdapterClass trainerAdapterClass = new TrainerAdapterClass(getContext(),data);
+                            trainerListView.setAdapter(trainerAdapterClass);
+                        }else {
+                            Toast.makeText(getActivity(),"ERROR"+task.getException(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void getMembersData(){
         db.collection("gymIDs/"+gym_Id+"/Member")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -94,17 +120,17 @@ public class MembersListFragment extends Fragment {
                                 MemberModel memberModel = documentSnapshot.toObject(MemberModel.class);
                                 data.add(memberModel);
                             }
-                            AdapterClass adapterClass = new AdapterClass(getContext(),data);
-                            listView.setAdapter(adapterClass);
+                            MemberAdapterClass memberAdapterClass = new MemberAdapterClass(getContext(),data);
+                            memberlistView.setAdapter(memberAdapterClass);
                         }else {
                             Toast.makeText(getActivity(),"ERROR"+task.getException(),Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
-    public static class AdapterClass extends ArrayAdapter<MemberModel>{
+    public static class MemberAdapterClass extends ArrayAdapter<MemberModel>{
 
-        public AdapterClass(@NonNull Context context, List<MemberModel>data) {
+        public MemberAdapterClass(@NonNull Context context, List<MemberModel>data) {
             super(context, R.layout.list_layout,data);
         }
 
@@ -119,14 +145,81 @@ public class MembersListFragment extends Fragment {
             TextView MemberName = convertView.findViewById(R.id.member_name_view);
             TextView Gender = convertView.findViewById(R.id.member_gender_view);
             TextView MobileNumber = convertView.findViewById(R.id.member_mobile_view);
+            TextView DateOfJoin = convertView.findViewById(R.id.member_doj_view);
+            TextView DateOfEnd = convertView.findViewById(R.id.member_doe_view);
+            Button Remove = convertView.findViewById(R.id.removeMember);
 
             MemberModel currentMemberModel = getItem(position);
 
             if (currentMemberModel!=null){
-                MemberName.setText(currentMemberModel.getFirstName()+" "+currentMemberModel.getLastName());
-                Gender.setText(currentMemberModel.getGender());
-                MobileNumber.setText(currentMemberModel.getMemberUsername());
+                MemberName.setText("Member Name : "+currentMemberModel.getFirstName()+" "
+                        +currentMemberModel.getLastName());
+                Gender.setText("Gender : "+currentMemberModel.getGender());
+                MobileNumber.setText("Phone Number : "+currentMemberModel.getMemberUsername());
+                DateOfJoin.setText("Date Of Joining : "+currentMemberModel.getDateOfJoining().get("date"));
+                DateOfEnd.setText("Date Of Ending : "+currentMemberModel.getDateOfEnding());
             }
+
+            Remove.setOnClickListener(view -> {
+                MembersListFragment.db.collection("gymIDs")
+                        .document(MembersListFragment.gym_Id).collection("Member")
+                        .document(currentMemberModel.getMemberUsername()).delete()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            });
+
+            return convertView;
+        }
+    }
+
+    public static class TrainerAdapterClass extends ArrayAdapter<TrainerModel>{
+
+        public TrainerAdapterClass(@NonNull Context context, List<TrainerModel>data) {
+            super(context, R.layout.list_layout,data);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if(convertView==null){
+                convertView = LayoutInflater.from(getContext()).inflate(
+                        R.layout.list_layout,parent
+                        ,false);
+            }
+            TextView TrainerName = convertView.findViewById(R.id.member_name_view);
+            TextView Gender = convertView.findViewById(R.id.member_gender_view);
+            TextView MobileNumber = convertView.findViewById(R.id.member_mobile_view);
+            TextView DateOfJoin = convertView.findViewById(R.id.member_doj_view);
+            TextView DateOfEnd = convertView.findViewById(R.id.member_doe_view);
+            Button Remove = convertView.findViewById(R.id.removeMember);
+
+            TrainerModel currentTrainerModel = getItem(position);
+
+            if (currentTrainerModel!=null){
+                TrainerName.setText("Trainer Name : "+currentTrainerModel.getFirstName()+" "
+                        +currentTrainerModel.getLastName());
+                Gender.setText("Gender : "+currentTrainerModel.getGender());
+                MobileNumber.setText("Phone Number : "+currentTrainerModel.getTrainerUsername());
+                DateOfJoin.setText("Date Of Joining : "+currentTrainerModel.getDateOfJoining());
+                DateOfEnd.setVisibility(View.GONE);
+            }
+
+            Remove.setOnClickListener(view -> {
+                MembersListFragment.db.collection("gymIDs")
+                        .document(MembersListFragment.gym_Id).collection("Member")
+                        .document(currentTrainerModel.getTrainerUsername()).delete()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            });
+
             return convertView;
         }
     }

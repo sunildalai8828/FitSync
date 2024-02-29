@@ -23,11 +23,18 @@
             android:textSize="20dp"
             android:textStyle="bold" />
 
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_below="@id/headingTextView"
+            />
+
         <TextView
             android:id="@+id/trainer_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/headingTextView"
+            android:layout_below="@id/divider"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
@@ -35,14 +42,17 @@
             android:text="*Visit Desk For Application*"
             android:gravity="center"
             android:textStyle="bold"/>
+
         <Button
             android:id="@+id/paymentButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pay Now"
-            android:backgroundTint="@color/main"
             android:layout_below="@id/trainer_info"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/main"
+            android:text="Pay Now"
+            android:textColor="@color/black" />
+
 
         <TextView
             android:id="@+id/trainer_info_1"

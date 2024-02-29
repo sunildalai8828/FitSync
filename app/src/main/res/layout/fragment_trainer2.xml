@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TrainerFragment2">
+    tools:context=".TrainerProfileFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,13 +34,20 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/gym_name" />
 
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_below="@id/gym_id"
+            />
+
         <TextView
             android:id="@+id/complain_box_view"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_below="@+id/gym_id"
+            android:layout_below="@+id/divider"
             android:paddingLeft="10dp"
-            android:layout_marginTop="69dp"
+            android:layout_marginTop="40dp"
             android:text="Complain Box"
             android:textSize="20dp"
             android:gravity="center_vertical"/>

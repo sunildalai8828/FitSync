@@ -17,13 +17,13 @@ public class TrainerActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new TrainerFragment1()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new TrainerClientFragment()).commit();
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.staff_overview) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new TrainerFragment1()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new TrainerClientFragment()).commit();
             } else if (item.getItemId() == R.id.staff_profile) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new TrainerFragment2()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new TrainerProfileFragment()).commit();
             }
             return true; // Return true to indicate that the event was handled
         });

@@ -29,6 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
+                android:textSize="15sp"
                 android:text="Gender"/>
 
             <TextView
@@ -36,12 +37,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
+                android:textSize="15sp"
                 android:text="MobileNumber" />
 
-            <Button
-                android:layout_width="101dp"
+            <TextView
+                android:id="@+id/member_doj_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:textSize="15sp"
+                android:text="DateOfJoin" />
+
+            <TextView
+                android:id="@+id/member_doe_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:textSize="15sp"
+                android:text="DateOfEnd" />
+
+            <Button
+                android:id="@+id/removeMember"
+                android:backgroundTint="@color/main"
+                android:layout_gravity="center"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:text="Remove"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

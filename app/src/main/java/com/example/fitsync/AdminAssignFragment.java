@@ -28,15 +28,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AdminFragment4#newInstance} factory method to
+ * Use the {@link AdminAssignFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AdminFragment4 extends Fragment {
+public class AdminAssignFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,7 +51,7 @@ public class AdminFragment4 extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AdminFragment4() {
+    public AdminAssignFragment() {
         // Required empty public constructor
     }
 
@@ -60,8 +64,8 @@ public class AdminFragment4 extends Fragment {
      * @return A new instance of fragment AdminFragment4.
      */
     // TODO: Rename and change types and number of parameters
-    public static AdminFragment4 newInstance(String param1, String param2) {
-        AdminFragment4 fragment = new AdminFragment4();
+    public static AdminAssignFragment newInstance(String param1, String param2) {
+        AdminAssignFragment fragment = new AdminAssignFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -83,6 +87,7 @@ public class AdminFragment4 extends Fragment {
     static String gym_id;
     static List<String> memberNames = new ArrayList<>();
     static List<String> memberUsernames = new ArrayList<>();
+    TextView noTrainerPresent;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,6 +95,7 @@ public class AdminFragment4 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_admin4, container, false);
 
         listView = view.findViewById(R.id.trainer_list);
+        noTrainerPresent = view.findViewById(R.id.no_trainers);
 
         if (!memberNames.contains("Select Member")) {
             memberNames.add("Select Member");
@@ -129,6 +135,7 @@ public class AdminFragment4 extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
+                            noTrainerPresent.setVisibility(View.GONE);
                             List<TrainerModel> data = new ArrayList<>();
                             for (DocumentSnapshot documentSnapshot : task.getResult()){
                                 TrainerModel trainerModel = documentSnapshot.toObject(TrainerModel.class);
@@ -161,10 +168,9 @@ public class AdminFragment4 extends Fragment {
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-
+                                                assignMemberToTrainer(documentSnapshot.getId(),memberModel,trainerModel);
                                             }
                                         });
-                                assignMemberToTrainer(documentSnapshot.getId(),memberModel,trainerModel);
                             }
                         }
                     }
@@ -218,6 +224,9 @@ public class AdminFragment4 extends Fragment {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             membersList.setAdapter(adapter);
 
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String currentDate = dateFormat.format(new Date());
+
             if (currentTrainerModel!=null){
                 trainerName.setText(currentTrainerModel.getFirstName()+" "+currentTrainerModel.getLastName());
                 experience.setText(currentTrainerModel.getExperience());
@@ -254,9 +263,40 @@ public class AdminFragment4 extends Fragment {
                     Toast.makeText(getContext(), "Please Select Mode of Payment", Toast.LENGTH_SHORT).show();
                 }
 
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date startDate = null;
+                try {
+                    startDate = sdf.parse(currentDate);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(startDate);
+                switch (trainerPlan) {
+                    case "1 Month":
+                        calendar.add(Calendar.DAY_OF_MONTH,30);
+                        break;
+                    case "3 Month":
+                        calendar.add(Calendar.DAY_OF_MONTH,90);
+                        break;
+                    case "6 Month":
+                        calendar.add(Calendar.DAY_OF_MONTH,180);
+                        break;
+                    case "9 Month":
+                        calendar.add(Calendar.DAY_OF_MONTH,270);
+                        break;
+                    case "12 Month":
+                        calendar.add(Calendar.DAY_OF_MONTH,360);
+                        break;
+                    default:
+                        Toast.makeText(getContext(), "Please Select Membership Plan", Toast.LENGTH_SHORT).show();
+                        return;
+                }
+                Date endDate = calendar.getTime();
+                String dateOfEnding = sdf.format(endDate);
 
                 TrainerSubscriptionModel trainerSubscriptionModel = new TrainerSubscriptionModel(currentTrainerModel,
-                       trainerPlan,modeOfPayment[0],amount,paymentStatus[0]);
+                       trainerPlan,currentDate,dateOfEnding,modeOfPayment[0],amount,paymentStatus[0]);
 
                 findMember(trainerSubscriptionModel,memberName,currentTrainerModel);
 

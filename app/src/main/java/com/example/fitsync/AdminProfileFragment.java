@@ -12,12 +12,13 @@ import androidx.fragment.app.Fragment;
 import com.example.fitsync.models.AdminModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-public class AdminFragment3 extends Fragment {
-    public AdminFragment3() {
+public class AdminProfileFragment extends Fragment {
+    public AdminProfileFragment() {
         // Required empty public constructor
     }
-    static String username;
+    static String username,gymName;
     TextView gymname_textview,gymid_textview,complaintbox_textview,sendmessage_textview,logout_textview;
     FirebaseFirestore firebase=FirebaseFirestore.getInstance();
     @Override
@@ -47,14 +48,22 @@ public class AdminFragment3 extends Fragment {
             startActivity(intent);
         });
 
+        sendmessage_textview.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), SendMessageActivity.class);
+            getActivity().startActivity(intent);
+        });
+
         logout_textview.setOnClickListener(view1 -> {
             LoginActivity.sharedPreferences.edit().remove("username").apply();
             LoginActivity.sharedPreferences.edit().remove("password").apply();
             LoginActivity.sharedPreferences.edit().remove("usertype").apply();
             LoginActivity.sharedPreferences.edit().remove("logged").apply();
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(gymid_textview.getText().toString());
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("admin");
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
         });
         return view;
     }
+    
 }

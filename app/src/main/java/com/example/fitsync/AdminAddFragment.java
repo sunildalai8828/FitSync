@@ -38,9 +38,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AdminFragment2 extends Fragment {
+public class AdminAddFragment extends Fragment {
     Spinner spinner,plans,experience;
-    EditText firstNameEditText,lastNameEditText,phoneNumberEditText,gymIDEditText,dateOfJoiningEditText;
+    EditText firstNameEditText,lastNameEditText,phoneNumberEditText,dateOfJoiningEditText;
     Button create;
     RadioGroup genderGroup,paymentGroup;
     String userType="",firstName,lastName,phoneNumber,gender="",
@@ -63,7 +63,6 @@ public class AdminFragment2 extends Fragment {
         firstNameEditText = view.findViewById(R.id.first_name_edit_text);
         lastNameEditText = view.findViewById(R.id.last_name_edit_text);
         phoneNumberEditText = view.findViewById(R.id.phone_number_edit_text);
-        gymIDEditText = view.findViewById(R.id.gym_id_edit_text);
         create = view.findViewById(R.id.create_btn);
         genderGroup = view.findViewById(R.id.gender_group);
         dateOfJoiningEditText = view.findViewById(R.id.date_join_edit_text);
@@ -72,7 +71,7 @@ public class AdminFragment2 extends Fragment {
         plans = view.findViewById(R.id.plan_spinner);
         paymentGroup = view.findViewById(R.id.mode_of_payment_group);
 
-
+        checkSMSPermission();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -132,7 +131,7 @@ public class AdminFragment2 extends Fragment {
         });
 
         create.setOnClickListener(v->{
-            checkSMSPermission();
+
             plan = plans.getSelectedItem().toString();
 
             if (userType.equals("Trainer")) {
@@ -172,10 +171,6 @@ public class AdminFragment2 extends Fragment {
                     phoneNumberEditText.getText().toString().length()>10) {
                 phoneNumberEditText.setError("Phone Number should not be empty!");
                 phoneNumberEditText.setError("Phone Number should be proper!");
-                return;
-            }
-            if (gymIDEditText.getText().toString().isEmpty()) {
-                gymIDEditText.setError("Gym Id should not be empty!");
                 return;
             }
             if(gender.isEmpty()) {
@@ -222,8 +217,6 @@ public class AdminFragment2 extends Fragment {
     }
 
     void createDateOfEnding() {
-
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
         try {
@@ -320,7 +313,7 @@ public class AdminFragment2 extends Fragment {
 
     private void sendSMSToMember() {
         String message = "Hello, " + firstName+" "+lastName + "\nGreetings From "+ gymName +
-                "These are your Login Credentials for FitSync App" +
+                ",These are your Login Credentials for FitSync App" +
                 "\nUsername : " +phoneNumber + "\nPassword : "+gymID;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phoneNumber,null,message,null,null);
