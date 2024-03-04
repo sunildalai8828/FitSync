@@ -59,7 +59,7 @@ public class AdminProfileFragment extends Fragment {
             LoginActivity.sharedPreferences.edit().remove("usertype").apply();
             LoginActivity.sharedPreferences.edit().remove("logged").apply();
             FirebaseMessaging.getInstance().unsubscribeFromTopic(gymid_textview.getText().toString());
-            FirebaseMessaging.getInstance().unsubscribeFromTopic("admin");
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(gymid_textview.getText().toString()+"admin");
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
         });

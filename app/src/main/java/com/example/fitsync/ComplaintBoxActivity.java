@@ -68,7 +68,7 @@ public class ComplaintBoxActivity extends AppCompatActivity {
             notificationObj.put("body",message);
 
             jsonObject.put("notification",notificationObj);
-            jsonObject.put("to","/topics/admin");
+            jsonObject.put("to","/topics/"+gym_id+"admin");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -84,7 +84,7 @@ public class ComplaintBoxActivity extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
-                .header("Authorization","Bearer AAAAYcoMIIA:APA91bGudZRe8xs3DZzztMcq7gb2o16voypBhYOCbSAycrtAleApQRr9NP6q8PWS77Dn5UHK3yk-7KU183yU2ylIz9LNnn9SVB9S0-Lke_7Bal4wlfaSJYYQL5R1E_ldlpZn5xk9cWmt")
+                .header("Authorization","Bearer "+BuildConfig.notificationApiKey)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

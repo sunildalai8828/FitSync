@@ -56,7 +56,7 @@ public class LoadActivity extends AppCompatActivity implements PaymentResultList
                         AdminModel adminModel = documentSnapshot.toObject(AdminModel.class);
 
                         FirebaseMessaging.getInstance().subscribeToTopic(adminModel.getGymId());
-                        FirebaseMessaging.getInstance().subscribeToTopic("admin");
+                        FirebaseMessaging.getInstance().subscribeToTopic(adminModel.getGymId()+"admin");
 
                         MembersListFragment.gym_Id = adminModel.getGymId();
                         AdminProfileFragment.username=adminModel.getAdminUsername();

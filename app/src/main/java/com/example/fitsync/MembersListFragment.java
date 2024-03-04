@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +73,7 @@ public class MembersListFragment extends Fragment {
     ListView trainerListView;
     static FirebaseFirestore db;
     static String gym_Id;
+    ImageButton memberListButton,trainerListButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,11 +81,34 @@ public class MembersListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_members_list, container, false);
         memberlistView = view.findViewById(R.id.memberslist);
         trainerListView = view.findViewById(R.id.trainerslist);
+        memberListButton = view.findViewById(R.id.member_list_button);
+        trainerListButton = view.findViewById(R.id.trainer_list_button);
         db=FirebaseFirestore.getInstance();
 
         Toast.makeText(getContext(), "GYM : "+gym_Id, Toast.LENGTH_SHORT).show();
         getMembersData();
         getTrainersData();
+
+        memberListButton.setOnClickListener(view1 -> {
+            switch (memberlistView.getVisibility()) {
+                case View.GONE:
+                    memberlistView.setVisibility(View.VISIBLE);
+                    break;
+                case View.VISIBLE:
+                    memberlistView.setVisibility(View.GONE);
+                    break;
+            }
+        });
+        trainerListButton.setOnClickListener(view1 -> {
+            switch (trainerListView.getVisibility()) {
+                case View.GONE:
+                    trainerListView.setVisibility(View.VISIBLE);
+                    break;
+                case View.VISIBLE:
+                    trainerListView.setVisibility(View.GONE);
+                    break;
+            }
+        });
         return view;
     }
 
